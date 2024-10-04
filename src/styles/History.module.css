@@ -1,0 +1,104 @@
+/* src/styles/History.module.css */
+.historyPage {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .historyPage h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .gameList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .gameItem {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .gameItem:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .gameLink {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .gameId {
+    font-weight: bold;
+  }
+  
+  .gameStatus {
+    font-style: italic;
+  }
+  
+  .winner {
+    color: #4caf50;
+  }
+  
+  .loser {
+    color: #f44336;
+  }
+  
+  .draw {
+    color: #ff9800;
+  }
+  
+  .ongoing {
+    color: #2196f3;
+  }
+  
+  .noGames {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 600px) {
+    .historyPage {
+      padding: 10px;
+    }
+  
+    .historyPage h1 {
+      font-size: 2rem;
+    }
+  
+    .gameItem {
+      padding: 10px;
+    }
+  }
+
+  .message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 20px;
+  }
+  
+  .error {
+    text-align: center;
+    color: #f44336;
+    font-size: 1.2rem;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffebee;
+    border-radius: 4px;
+  }
+  
+  

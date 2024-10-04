@@ -1,0 +1,87 @@
+.gamePage {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .gamePage h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .gamePage p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .error {
+    color: #d32f2f;
+    font-size: 1.2rem;
+    padding: 10px;
+    background-color: #ffcdd2;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  
+  .loading {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 20px 0;
+  }
+  
+  .winner {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4caf50;
+    margin: 20px 0;
+  }
+  
+  .draw {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff9800;
+    margin: 20px 0;
+  }
+  
+  .currentPlayer {
+    font-weight: bold;
+    color: #2196f3;
+  }
+  
+  @media (max-width: 600px) {
+    .gamePage {
+      padding: 10px;
+    }
+  
+    .gamePage h1 {
+      font-size: 2rem;
+    }
+  
+    .gamePage p, .error, .loading {
+      font-size: 1rem;
+    }
+  }
+
+  .returnButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .returnButton:hover {
+    background-color: #45a049;
+  }
+  
+  
