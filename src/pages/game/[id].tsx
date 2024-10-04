@@ -8,6 +8,7 @@ import Board from '@/components/Board';
 import MoveHistory from '@/components/MoveHistory';
 import { GameState, Move } from '@/types/game';
 import styles from '@/styles/Game.module.css';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 
 const GamePage = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ const GamePage = () => {
   const [user] = useAuthState(auth);
   const [game, setGame] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
+    const { copyToClipboard, copySuccess } = useCopyToClipboard();
 
   useEffect(() => {
     let unsubscribe: () => void;
@@ -26,12 +28,11 @@ const GamePage = () => {
           if (doc.exists()) {
             const gameData = doc.data() as GameState;
             
-            // If this is the second player joining, update the game
             if (gameData.players.length === 1 && !gameData.players.some(p => p.id === user.uid)) {
               const updatedGame = {
                 ...gameData,
                 players: [...gameData.players, { id: user.uid, name: user.displayName || 'Anonymous' }],
-                currentPlayer: gameData.players[0].id // Set the first player to start
+                currentPlayer: gameData.players[0].id
               };
               await updateDoc(gameRef, updatedGame);
             } else {
@@ -129,11 +130,29 @@ const GamePage = () => {
     return playerIndex === 0 ? 'X' : 'O';
   };
 
+  const handleCopyGameId = useCallback(() => {
+    if (id) {
+      copyToClipboard(id as string);
+    }
+  }, [id, copyToClipboard]);
 
-  if (error) return <div className={styles.error}>{error}</div>;
-  if (!game || !user) return <div className={styles.loading}>Loading...</div>;
-  if (game.players.length < 2) return <div>Waiting for opponent to join...</div>;
 
+  if (error) return <div className={styles.centerMessage}>{error}</div>;
+  if (!game || !user) return <div className={styles.centerMessage}>Loading...</div>;
+  if (game.players.length < 2) {
+    return (
+      <div className={styles.centerMessage}>
+        <div>
+          <p>Waiting for opponent to join...</p>
+          <p>Game ID: {id}</p>
+          <button onClick={handleCopyGameId} className={styles.copyButton}>
+            Copy Game ID
+          </button>
+          {copySuccess && <span className={styles.copySuccess}>{copySuccess}</span>}
+        </div>
+      </div>
+    );
+  }
   const isYourTurn = game.currentPlayer === user.uid;
   const playerSymbol = getPlayerSymbol();
 
@@ -148,7 +167,7 @@ const GamePage = () => {
         Current Player: {isYourTurn ? 'Your turn' : "Opponent's turn"}
       </p>
       {game.winner && (
-        <div>
+        <div className={styles.resultContainer}>
           <p className={game.winner === 'draw' ? styles.draw : styles.winner}>
             {game.winner === 'draw' 
               ? "It's a draw!" 
@@ -161,14 +180,18 @@ const GamePage = () => {
           </button>
         </div>
       )}
-      <div className={styles.gameContent}>
-        <Board
-          board={game.board}
-          onMove={makeMove}
-          isYourTurn={isYourTurn && !game.winner}
-        />
-        <MoveHistory moves={game.moves} players={game.players} />
-      </div>
+        <div className={styles.gameContent}>
+        <div className={styles.boardWrapper}>
+            <Board
+            board={game.board}
+            onMove={makeMove}
+            isYourTurn={isYourTurn && !game.winner}
+            />
+        </div>
+        <div className={styles.moveHistoryWrapper}>
+            <MoveHistory moves={game.moves} players={game.players} />
+        </div>
+        </div>
     </div>
   );
 };

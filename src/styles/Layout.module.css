@@ -1,0 +1,16 @@
+.layout {
+    min-height: 100vh;
+  }
+  
+  .main {
+    padding-top: var(--navbar-height); /* This should match the height of your navbar */
+    min-height: 100vh;
+  }
+  
+  .fullPageCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }

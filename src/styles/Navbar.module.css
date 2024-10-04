@@ -3,8 +3,15 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #f8f9fa;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #ffffff; /* Clean white background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--navbar-height);
+    z-index: 1000;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
   }
   
   .navLink {
@@ -12,18 +19,34 @@
     color: #333;
     margin-right: 1rem;
     font-weight: bold;
+    background-color: #0071e3;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding: 0.5rem 1rem;
   }
   
   .logoutButton {
-    background-color: #dc3545;
+    background-color: #0071e3;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-weight: bold;
   }
   
   .logoutButton:hover {
-    background-color: #c82333;
+    background-color: #0071e3;
   }
+
+  .title {
+    font-weight: 600;
+    font-size: 1.2rem; /* Slightly larger, bold title text */
+    color: #1d1d1f; /* Dark gray for neutral text */
+    padding-left: 1rem;
+  }
+  
+  

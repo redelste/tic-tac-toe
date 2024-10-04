@@ -1,8 +1,145 @@
 .container {
-    min-height: 100vh;
-    padding: 0 0.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - var(--navbar-height));
+    padding: 20px;
+    background-color: #f5f5f7;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  .title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin-bottom: 2rem;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .welcome {
+    font-size: 1.2rem;
+    color: #1d1d1f;
+    margin-bottom: 1rem;
+  }
+  
+  .button {
+    background-color: #0071e3;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .signInButton {
+    background-color: #0071e3;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1rem;
+  }
+  
+  .button:hover {
+    background-color: #0077ed;
+  }
+  
+  .gameIdContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  .gameId {
+    font-size: 1rem;
+    color: #1d1d1f;
+    margin-bottom: 0.5rem;
+  }
+  
+  .copyButton {
+    background-color: #e0e0e0;
+    color: #1d1d1f;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .copyButton:hover {
+    background-color: #d0d0d0;
+  }
+  
+  .copySuccess {
+    color: #28a745;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  
+  .joinGameContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .input {
+    border: 1px solid #d2d2d7;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+  
+  .link {
+    color: #0071e3;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  .link:hover {
+    color: #0077ed;
+    text-decoration: underline;
+  }
+  
+  .activeLink {
+    color: #0071e3;
+  }
+  
+  .disabledLink {
+    color: #6e6e73;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 2.5rem;
+    }
+  
+    .button, .input {
+      font-size: 0.9rem;
+    }
   }

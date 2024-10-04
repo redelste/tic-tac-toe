@@ -16,16 +16,20 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={styles.navbar}>
-      <Link href="/" className={styles.navLink}>
+    <nav className={styles.navbar} aria-label="Main Navigation">
+      <Link href="/" className={styles.navLink} aria-label="Go to homepage">
         Home
       </Link>
       {user && (
         <>
-          <Link href="/history" className={styles.navLink}>
-            Game History
-          </Link>
-          <button onClick={handleLogout} className={styles.logoutButton}>
+          <div className={styles.title} role="heading" aria-level={1}>
+            Tic-Tac-Toe!
+          </div>
+          <button 
+            onClick={handleLogout} 
+            className={styles.logoutButton} 
+            aria-label="Logout from the application"
+          >
             Logout
           </button>
         </>

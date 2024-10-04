@@ -1,4 +1,3 @@
-// src/components/MoveHistory.tsx
 import React from 'react';
 import { Move, PlayerInfo } from '@/types/game';
 import styles from '@/styles/MoveHistory.module.css';
@@ -15,16 +14,21 @@ const MoveHistory: React.FC<MoveHistoryProps> = ({ moves, players }) => {
   };
 
   return (
-    <div className={styles.moveHistory}>
-      <h3>Move History</h3>
-      <ul className={styles.moveList}>
+    <div className={styles.moveHistory} role="region" aria-labelledby="moveHistoryTitle">
+      <h2 id="moveHistoryTitle" className={styles.moveHistoryTitle}>Move History</h2>
+      <ul className={styles.moveList} role="list">
         {moves.map((move, index) => (
-          <li key={index} className={styles.moveItem}>
-            <span className={styles.moveNumber}>{move.moveNumber}.</span>
-            <span className={styles.playerSymbol}>
+          <li key={index} className={styles.moveItem} role="listitem">
+            <span className={styles.moveNumber} aria-label={`Move ${move.moveNumber}`}>
+              {move.moveNumber}.
+            </span>
+            <span
+              className={styles.playerSymbol}
+              aria-label={`Player ${getPlayerName(move.player)} played ${move.symbol}`}
+            >
               {move.symbol} ({getPlayerName(move.player)})
             </span>
-            <span className={styles.movePosition}>
+            <span className={styles.movePosition} aria-label={`Position: ${move.position + 1}`}>
               Position: {move.position + 1}
             </span>
           </li>
