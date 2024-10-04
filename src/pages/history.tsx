@@ -5,14 +5,12 @@ import { auth, db } from '@/lib/firebase';
 import Link from 'next/link';
 import { GameWithId } from '@/types/game';
 import styles from '@/styles/History.module.css';
-import { useFormattedDate } from '@/hooks/useFormattedDate';
 
 const HistoryPage = () => {
   const [user] = useAuthState(auth);
   const [games, setGames] = useState<GameWithId[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const formattedDate = useFormattedDate();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -54,7 +52,7 @@ const HistoryPage = () => {
     try {
       await updateDoc(doc(db, 'games', gameId), {
         cancelled: true,
-        endedAt: formattedDate
+        endedAt: new Date()
       });
       // Update local state
       setGames(games.map(game => 
