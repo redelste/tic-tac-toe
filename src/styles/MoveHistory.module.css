@@ -1,10 +1,9 @@
 .moveHistory {
-    padding: 10px;
+    padding: 0 10px 0px 10px;
     border-radius: 4px;
     display: flex;
     margin: auto;
     flex-direction: column;
-    margin-top: 16px;
   }
   
   .moveList {
@@ -38,5 +37,7 @@
   .moveHistoryTitle {
     font-size: 1.2rem;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
+    border-bottom: 1px solid black;
+    padding-bottom: 4px;
   }

@@ -1,4 +1,3 @@
-// src/pages/history.tsx
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { collection, query, where, getDocs, orderBy, updateDoc, doc } from 'firebase/firestore';
@@ -6,12 +5,14 @@ import { auth, db } from '@/lib/firebase';
 import Link from 'next/link';
 import { GameWithId } from '@/types/game';
 import styles from '@/styles/History.module.css';
+import { useFormattedDate } from '@/hooks/useFormattedDate';
 
 const HistoryPage = () => {
   const [user] = useAuthState(auth);
   const [games, setGames] = useState<GameWithId[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const formattedDate = useFormattedDate();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -53,7 +54,7 @@ const HistoryPage = () => {
     try {
       await updateDoc(doc(db, 'games', gameId), {
         cancelled: true,
-        endedAt: new Date()
+        endedAt: formattedDate
       });
       // Update local state
       setGames(games.map(game => 
@@ -86,8 +87,8 @@ const HistoryPage = () => {
                   <span className={styles.gameMoves}>Moves: {game.moves.length}</span>
                   <span className={styles.gameDate}>
                     {game.endedAt 
-                      ? `Ended: ${new Date(game.endedAt).toLocaleDateString()}` 
-                      : `Started: ${new Date(game.createdAt).toLocaleDateString()}`}
+                      ? `Ended: ${game.endedAt}` 
+                      : `Started: ${game.createdAt}`}
                   </span>
                 </div>
               </Link>

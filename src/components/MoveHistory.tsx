@@ -17,7 +17,8 @@ const MoveHistory: React.FC<MoveHistoryProps> = ({ moves, players }) => {
     <div className={styles.moveHistory} role="region" aria-labelledby="moveHistoryTitle">
       <h2 id="moveHistoryTitle" className={styles.moveHistoryTitle}>Move History</h2>
       <ul className={styles.moveList} role="list">
-        {moves.map((move, index) => (
+        {moves.length === 0 && <li className={styles.noMoves}>No moves yet.</li>}
+        {moves.length > 0 &&  moves.map((move, index) => (
           <li key={index} className={styles.moveItem} role="listitem">
             <span className={styles.moveNumber} aria-label={`Move ${move.moveNumber}`}>
               {move.moveNumber}.

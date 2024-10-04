@@ -36,7 +36,7 @@
   
   
   .currentPlayer {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     margin-bottom: 1rem;
     color: #007aff;
     font-weight: 500;
@@ -80,19 +80,18 @@
   }
   
   .copyButton {
-    background-color: #007aff;
-    color: white;
+    background-color: #e0e0e0;
+    color: #1d1d1f;
     border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
+    border-radius: 15px;
+    padding: 5px 15px;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 1rem;
   }
   
   .copyButton:hover {
-    background-color: #0056b3;
+    background-color: #d0d0d0;
   }
   
   .copySuccess {
@@ -119,7 +118,7 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: 0 0 2rem 0;
   }
   
   .boardWrapper {
@@ -132,6 +131,10 @@
   .moveHistoryWrapper {
     grid-column: 3 / 4;
     justify-self: start;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #000000;
+    width: 100%;
   }
   
   @media (max-width: 768px) {

@@ -1,4 +1,3 @@
-// src/pages/index.tsx
 import { useCallback, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -7,14 +6,12 @@ import { collection, addDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import styles from '@/styles/Home.module.css';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
-import { useRouter } from 'next/router';
+import { useFormattedDate } from '@/hooks/useFormattedDate';
 
 export default function Home() {
   const [user] = useAuthState(auth);
   const [gameId, setGameId] = useState('');
   const [joinGameId, setJoinGameId] = useState('');
-  const router = useRouter();
-  const { id } = router.query;
   const { copyToClipboard, copySuccess } = useCopyToClipboard();
 
 
@@ -27,6 +24,8 @@ export default function Home() {
     }
   };
 
+  const formattedDate = useFormattedDate();
+
   const createGame = async () => {
     if (!user) return;
 
@@ -37,10 +36,9 @@ export default function Home() {
         currentPlayer: null,
         winner: null,
         moves: [],
-        createdAt: new Date(),
+        createdAt: formattedDate,
         endedAt: null
       });
-
       setGameId(gameRef.id);
     } catch (error) {
       console.error("Error creating new game", error);
@@ -54,11 +52,10 @@ export default function Home() {
   };
 
   const handleCopyGameId = useCallback(() => {
-    if (id) {
-      copyToClipboard(id as string);
+    if (gameId) {
+      copyToClipboard(gameId as string);
     }
-  }, [id, copyToClipboard]);
-
+  }, [gameId, copyToClipboard]);
 
   return (
     <div className={styles.container}>
@@ -71,7 +68,7 @@ export default function Home() {
             <div className={styles.gameIdContainer}>
               <span className={styles.gameId}>Game ID: {gameId}</span>
               <button onClick={handleCopyGameId} className={styles.copyButton}>
-                Copy ID
+                Copy Game ID
               </button>
               {copySuccess && <span className={styles.copySuccess}>{copySuccess}</span>}
             </div>

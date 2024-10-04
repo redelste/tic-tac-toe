@@ -1,4 +1,3 @@
-// src/pages/game/[id].tsx
 import { useRouter } from 'next/router';
 import { useEffect, useState, useCallback } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -9,6 +8,7 @@ import MoveHistory from '@/components/MoveHistory';
 import { GameState, Move } from '@/types/game';
 import styles from '@/styles/Game.module.css';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
+import { useFormattedDate } from '@/hooks/useFormattedDate';
 
 const GamePage = () => {
   const router = useRouter();
@@ -16,7 +16,8 @@ const GamePage = () => {
   const [user] = useAuthState(auth);
   const [game, setGame] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
-    const { copyToClipboard, copySuccess } = useCopyToClipboard();
+  const { copyToClipboard, copySuccess } = useCopyToClipboard();
+  const formattedDate = useFormattedDate();
 
   useEffect(() => {
     let unsubscribe: () => void;
@@ -156,16 +157,16 @@ const GamePage = () => {
   const isYourTurn = game.currentPlayer === user.uid;
   const playerSymbol = getPlayerSymbol();
 
-  
   return (
     <div className={styles.gamePage}>
-      <h1>Game {id}</h1>
+      <h1>Game: {game.players[0].name} vs {game.players[1].name}</h1>
       <div className={styles.playerInfo}>
         You are playing as: <span className={styles.playerSymbol}>{playerSymbol}</span>
       </div>
-      <p className={styles.currentPlayer}>
-        Current Player: {isYourTurn ? 'Your turn' : "Opponent's turn"}
-      </p>
+      {!game.winner && <p className={styles.currentPlayer}>
+        Current Player: {isYourTurn ? 'Your Turn' : 'Opponents Turn!'}
+      </p>}
+      {game.endedAt && <p className={styles.currentPlayer}>Game ended: {formattedDate}</p>}
       {game.winner && (
         <div className={styles.resultContainer}>
           <p className={game.winner === 'draw' ? styles.draw : styles.winner}>
@@ -173,7 +174,7 @@ const GamePage = () => {
               ? "It's a draw!" 
               : game.winner === user.uid 
                 ? 'You won!' 
-                : 'Opponent won!'}
+                : `${game.players.find(p => p.id === game.winner)?.name || 'Opponent'} won!`}
           </p>
           <button onClick={returnHome} className={styles.returnButton}>
             Return to Home
@@ -186,6 +187,7 @@ const GamePage = () => {
             board={game.board}
             onMove={makeMove}
             isYourTurn={isYourTurn && !game.winner}
+            status={game.endedAt ? true : false}
             />
         </div>
         <div className={styles.moveHistoryWrapper}>
