@@ -17,7 +17,7 @@ export interface PlayerInfo {
     winner: string | null;
     moves: Move[];
     createdAt: Date;
-    endedAt: Date | null;
+    endedAt: string | Date | null;
     cancelled?: boolean;
   }
   

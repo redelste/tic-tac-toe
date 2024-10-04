@@ -87,10 +87,10 @@ const GamePage = () => {
     const winner = checkWinner(newBoard);
     if (winner) {
       updatedGame.winner = user.uid;
-      updatedGame.endedAt = new Date();
+      updatedGame.endedAt = formattedDate;
     } else if (!newBoard.includes(null)) {
       updatedGame.winner = 'draw';
-      updatedGame.endedAt = new Date();
+      updatedGame.endedAt = formattedDate;
     }
 
     try {
