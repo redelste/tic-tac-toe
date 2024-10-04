@@ -66,7 +66,6 @@ const HistoryPage = () => {
   if (!user) return <div className={styles.message}>Please sign in to view your game history.</div>;
   if (loading) return <div className={styles.message}>Loading game history...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
-  console.log("games", games)
   return (
     <div className={styles.historyPage}>
       <h1>Your Game History</h1>

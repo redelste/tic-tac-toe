@@ -99,7 +99,7 @@ const GamePage = () => {
       console.error("Error updating game:", err);
       setError('Failed to make move. Please try again.');
     }
-  }, [game, user, id]);
+  }, [game, user, formattedDate, id]);
 
   const checkWinner = (board: (string | null)[]) => {
     const lines = [
