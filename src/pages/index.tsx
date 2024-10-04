@@ -26,12 +26,13 @@ export default function Home() {
 
     try {
       const gameRef = await addDoc(collection(db, 'games'), {
-        players: [user.uid],
+        players: [{ id: user.uid, name: user.displayName || 'Anonymous' }],
         board: Array(9).fill(null),
-        currentPlayer: null,  // We'll set this when the second player joins
+        currentPlayer: null,
         winner: null,
         moves: [],
-        createdAt: new Date()
+        createdAt: new Date(),
+        endedAt: null
       });
 
       setGameId(gameRef.id);

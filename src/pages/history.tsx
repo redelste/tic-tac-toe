@@ -1,7 +1,7 @@
 // src/pages/history.tsx
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, updateDoc, doc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import Link from 'next/link';
 import { GameWithId } from '@/types/game';
@@ -19,7 +19,7 @@ const HistoryPage = () => {
         try {
           const q = query(
             collection(db, 'games'),
-            where('players', 'array-contains', user.uid),
+            where('players', 'array-contains', { id: user.uid, name: user.displayName || 'Anonymous' }),
             orderBy('createdAt', 'desc')
           );
           const querySnapshot = await getDocs(q);
@@ -36,18 +36,33 @@ const HistoryPage = () => {
     fetchGames();
   }, [user]);
 
-  const getGameStatus = (game: GameWithId, userId: string): string => {
-    if (game.winner === 'draw') return "It's a draw!";
-    if (game.winner === userId) return 'You won!';
-    if (game.winner) return 'You lost';
-    return 'Ongoing';
+  const getGameResult = (game: GameWithId) => {
+    if (game.cancelled) return "Cancelled";
+    if (game.winner === 'draw') return "Draw";
+    if (game.winner === user?.uid) return "Win";
+    if (game.winner) return "Loss";
+    return "Ongoing";
   };
 
-  const getStatusClass = (game: GameWithId, userId: string): string => {
-    if (game.winner === 'draw') return styles.draw;
-    if (game.winner === userId) return styles.winner;
-    if (game.winner) return styles.loser;
-    return styles.ongoing;
+  const getOpponentName = (game: GameWithId) => {
+    const opponent = game.players.find(player => player.id !== user?.uid);
+    return opponent ? opponent.name : 'Unknown';
+  };
+
+  const cancelGame = async (gameId: string) => {
+    try {
+      await updateDoc(doc(db, 'games', gameId), {
+        cancelled: true,
+        endedAt: new Date()
+      });
+      // Update local state
+      setGames(games.map(game => 
+        game.id === gameId ? { ...game, cancelled: true, endedAt: new Date() } : game
+      ));
+    } catch (err) {
+      console.error("Error cancelling game:", err);
+      setError("Failed to cancel game. Please try again.");
+    }
   };
 
   if (!user) return <div className={styles.message}>Please sign in to view your game history.</div>;
@@ -63,19 +78,33 @@ const HistoryPage = () => {
         <ul className={styles.gameList}>
           {games.map((game) => (
             <li key={game.id} className={styles.gameItem}>
-              <Link href={`/game/${game.id}`} className={styles.gameLink}>
-                <span className={styles.gameId}>Game {game.id.slice(0, 6)}...</span>
-                <span className={`${styles.gameStatus} ${getStatusClass(game, user.uid)}`}>
-                  {getGameStatus(game, user.uid)}
-                </span>
+              <Link href={`/game/${game.id}`}>
+                <div className={styles.gameLink}>
+                  <span className={styles.gameId}>Game {game.id.slice(0, 6)}...</span>
+                  <span className={styles.gameResult}>{getGameResult(game)}</span>
+                  <span className={styles.opponent}>vs {getOpponentName(game)}</span>
+                  <span className={styles.gameMoves}>Moves: {game.moves.length}</span>
+                  <span className={styles.gameDate}>
+                    {game.endedAt 
+                      ? `Ended: ${new Date(game.endedAt).toLocaleDateString()}` 
+                      : `Started: ${new Date(game.createdAt).toLocaleDateString()}`}
+                  </span>
+                </div>
               </Link>
+              {!game.winner && !game.cancelled && (
+                <button 
+                  onClick={() => cancelGame(game.id)} 
+                  className={styles.cancelButton}
+                >
+                  Cancel Game
+                </button>
+              )}
             </li>
           ))}
         </ul>
       )}
     </div>
   );
-
 };
 
 export default HistoryPage;

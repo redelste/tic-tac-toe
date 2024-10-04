@@ -1,10 +1,24 @@
-export interface GameState {
-    players: string[];
+export interface PlayerInfo {
+    id: string;
+    name: string;
+  }
+  
+  export interface Move {
+    player: string;
+    position: number;
+    symbol: 'X' | 'O';
+    moveNumber: number;
+  }
+  
+  export interface GameState {
+    players: PlayerInfo[];
     board: (string | null)[];
-    currentPlayer: string;
+    currentPlayer: string | null;
     winner: string | null;
-    moves: { player: string; position: number }[];
+    moves: Move[];
     createdAt: Date;
+    endedAt: Date | null;
+    cancelled?: boolean;
   }
   
   export interface GameWithId extends GameState {

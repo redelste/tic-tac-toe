@@ -1,0 +1,35 @@
+.moveHistory {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+  
+  .moveList {
+    list-style-type: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .moveItem {
+    margin-bottom: 5px;
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 2px;
+  }
+  
+  .moveNumber {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  
+  .playerSymbol {
+    margin-right: 5px;
+  }
+  
+  .movePosition {
+    color: #666;
+  }
+  
+  

@@ -5,7 +5,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import Board from '@/components/Board';
-import { GameState } from '@/types/game';
+import MoveHistory from '@/components/MoveHistory';
+import { GameState, Move } from '@/types/game';
 import styles from '@/styles/Game.module.css';
 
 const GamePage = () => {
@@ -25,11 +26,12 @@ const GamePage = () => {
           if (doc.exists()) {
             const gameData = doc.data() as GameState;
             
-            if (gameData.players.length === 1 && !gameData.players.includes(user.uid)) {
+            // If this is the second player joining, update the game
+            if (gameData.players.length === 1 && !gameData.players.some(p => p.id === user.uid)) {
               const updatedGame = {
                 ...gameData,
-                players: [...gameData.players, user.uid],
-                currentPlayer: gameData.players[0]
+                players: [...gameData.players, { id: user.uid, name: user.displayName || 'Anonymous' }],
+                currentPlayer: gameData.players[0].id // Set the first player to start
               };
               await updateDoc(gameRef, updatedGame);
             } else {
@@ -55,33 +57,6 @@ const GamePage = () => {
     };
   }, [id, user]);
 
-  // Reconnection logic
-  useEffect(() => {
-    let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
-    let reconnectInterval: NodeJS.Timeout;
-
-    if (error) {
-      reconnectInterval = setInterval(() => {
-        if (reconnectAttempts < maxReconnectAttempts) {
-          console.log('Attempting to reconnect...');
-          // Re-run the effect to attempt reconnection
-          reconnectAttempts++;
-          setError(null); // This will trigger the main useEffect to run again
-        } else {
-          clearInterval(reconnectInterval);
-          setError('Unable to connect after several attempts. Please refresh the page.');
-        }
-      }, 5000); // Try to reconnect every 5 seconds
-    }
-
-    return () => {
-      if (reconnectInterval) {
-        clearInterval(reconnectInterval);
-      }
-    };
-  }, [error]);
-
   const makeMove = useCallback(async (index: number) => {
     if (!game || !user || game.winner || game.board[index]) return;
 
@@ -91,21 +66,29 @@ const GamePage = () => {
     }
 
     const newBoard = [...game.board];
-    newBoard[index] = game.players.indexOf(user.uid) === 0 ? 'X' : 'O';
+    const symbol = game.players.findIndex(p => p.id === user.uid) === 0 ? 'X' : 'O';
+    newBoard[index] = symbol;
 
-    const updatedGame = {
-      ...game,
-      board: newBoard,
-      currentPlayer: game.players.find(playerId => playerId !== user.uid) || game.currentPlayer,
-      moves: [...game.moves, { player: user.uid, position: index }]
+    const newMove: Move = {
+      player: user.uid,
+      position: index,
+      symbol,
+      moveNumber: game.moves.length + 1
     };
 
-    // Check for winner
+    const updatedGame: Partial<GameState> = {
+      board: newBoard,
+      currentPlayer: game.players.find(p => p.id !== user.uid)?.id || null,
+      moves: [...game.moves, newMove]
+    };
+
     const winner = checkWinner(newBoard);
     if (winner) {
       updatedGame.winner = user.uid;
+      updatedGame.endedAt = new Date();
     } else if (!newBoard.includes(null)) {
       updatedGame.winner = 'draw';
+      updatedGame.endedAt = new Date();
     }
 
     try {
@@ -140,15 +123,27 @@ const GamePage = () => {
     router.push('/');
   };
 
+  const getPlayerSymbol = () => {
+    if (!game || !user) return null;
+    const playerIndex = game.players.findIndex(p => p.id === user.uid);
+    return playerIndex === 0 ? 'X' : 'O';
+  };
+
+
   if (error) return <div className={styles.error}>{error}</div>;
   if (!game || !user) return <div className={styles.loading}>Loading...</div>;
   if (game.players.length < 2) return <div>Waiting for opponent to join...</div>;
 
   const isYourTurn = game.currentPlayer === user.uid;
+  const playerSymbol = getPlayerSymbol();
 
+  
   return (
     <div className={styles.gamePage}>
       <h1>Game {id}</h1>
+      <div className={styles.playerInfo}>
+        You are playing as: <span className={styles.playerSymbol}>{playerSymbol}</span>
+      </div>
       <p className={styles.currentPlayer}>
         Current Player: {isYourTurn ? 'Your turn' : "Opponent's turn"}
       </p>
@@ -166,11 +161,14 @@ const GamePage = () => {
           </button>
         </div>
       )}
-      <Board
-        board={game.board}
-        onMove={makeMove}
-        isYourTurn={isYourTurn && !game.winner}
-      />
+      <div className={styles.gameContent}>
+        <Board
+          board={game.board}
+          onMove={makeMove}
+          isYourTurn={isYourTurn && !game.winner}
+        />
+        <MoveHistory moves={game.moves} players={game.players} />
+      </div>
     </div>
   );
 };
