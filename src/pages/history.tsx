@@ -54,7 +54,6 @@ const HistoryPage = () => {
         cancelled: true,
         endedAt: new Date()
       });
-      // Update local state
       setGames(games.map(game => 
         game.id === gameId ? { ...game, cancelled: true, endedAt: new Date() } : game
       ));
