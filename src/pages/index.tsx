@@ -7,13 +7,14 @@ import Link from 'next/link';
 import styles from '@/styles/Home.module.css';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useFormattedDate } from '@/hooks/useFormattedDate';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const [user] = useAuthState(auth);
   const [gameId, setGameId] = useState('');
   const [joinGameId, setJoinGameId] = useState('');
   const { copyToClipboard, copySuccess } = useCopyToClipboard();
-
+  const router = useRouter();
 
   const signIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -39,11 +40,15 @@ export default function Home() {
         createdAt: formattedDate,
         endedAt: null
       });
-      setGameId(gameRef.id);
+      
+      const newGameId = gameRef.id;
+      setGameId(newGameId);
+      router.push(`/game/${newGameId}`);
     } catch (error) {
       console.error("Error creating new game", error);
     }
   };
+
 
   const handleJoinGame = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!joinGameId.trim()) {
@@ -99,7 +104,15 @@ export default function Home() {
           </Link>
         </div>
       ) : (
+        <div className={styles.authButtonsContainer}>
         <button onClick={signIn} className={styles.signInButton}>Sign in with Google</button>
+        <Link href="/signin" className={styles.signInButton}>
+            Sign In with Email
+          </Link>
+          <Link href="/signup" className={styles.signInButton}>
+            Sign Up
+          </Link>
+        </div>
       )}
     </div>
   );
