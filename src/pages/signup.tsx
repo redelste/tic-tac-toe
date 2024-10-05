@@ -15,21 +15,17 @@ export default function SignUp() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Create user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Update user profile with name
       await updateProfile(user, { displayName: name });
 
-      // Store additional user info in Firestore
       await setDoc(doc(db, 'users', user.uid), {
         name: name,
         email: email,
         createdAt: new Date()
       });
 
-      // Redirect to home page after successful sign up
       router.push('/');
     } catch (error) {
       if (error instanceof Error) {

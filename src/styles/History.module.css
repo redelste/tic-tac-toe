@@ -30,12 +30,12 @@
 
 .gameItem:hover {
   background-color: #fafafa;
-  transform: translateY(-2px); /* Slight hover effect */
+  transform: translateY(-2px);
 }
 
 .gameLink {
   display: flex;
-  flex-direction: column; /* Stack content for a cleaner layout */
+  flex-direction: column;
   color: #1d1d1f;
   text-decoration: none;
 }
@@ -43,7 +43,7 @@
 .gameId {
   font-weight: 500;
   font-size: 1rem;
-  color: #007aff; /* Apple's blue for emphasis */
+  color: #007aff;
 }
 
 .gameResult {
@@ -77,7 +77,6 @@
   margin-top: 20px;
 }
 
-/* Button styles */
 .cancelButton {
   background-color: #ff3b30;
   color: white;
@@ -92,25 +91,6 @@
 
 .cancelButton:hover {
   background-color: #ff1f0f;
-}
-
-/* Responsive styling for mobile devices */
-@media (max-width: 600px) {
-  .historyPage {
-    padding: 10px;
-  }
-
-  .historyPage h1 {
-    font-size: 2rem;
-  }
-
-  .gameItem {
-    padding: 15px;
-  }
-
-  .gameLink {
-    flex-direction: column;
-  }
 }
 
 .message {
@@ -128,4 +108,22 @@
   padding: 10px;
   background-color: #ffebee;
   border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .historyPage {
+    padding: 10px;
+  }
+
+  .historyPage h1 {
+    font-size: 2rem;
+  }
+
+  .gameItem {
+    padding: 15px;
+  }
+
+  .gameLink {
+    flex-direction: column;
+  }
 }

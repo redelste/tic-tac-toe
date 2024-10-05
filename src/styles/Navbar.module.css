@@ -3,8 +3,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #ffffff; /* Clean white background */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     position: fixed;
     top: 0;
     left: 0;
@@ -44,8 +44,8 @@
 
   .title {
     font-weight: 600;
-    font-size: 1.2rem; /* Slightly larger, bold title text */
-    color: #1d1d1f; /* Dark gray for neutral text */
+    font-size: 1.2rem;
+    color: #1d1d1f;
     padding-left: 1rem;
   }
   
